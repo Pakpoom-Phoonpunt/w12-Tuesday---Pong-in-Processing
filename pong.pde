@@ -1,9 +1,12 @@
-PongGame game = new PongGame();
+PongGame game;
 void setup (){
  size (1500,1000);
+ game = new PongGame();
 }
 void draw(){
+  background(100);
   game.draw();
+  game.clickAndMove();
 }
 
 class PongPaddle {
@@ -22,40 +25,48 @@ class PongPaddle {
   }
   
   void draw (){
-  
+    rect(this.positionX,this.positionY,50,500);
+  }
+  void move (){ // move ball
+    rect(this.positionX,mouseY,50,500);
   }
 }
 
 class Pongball {
   float velocity_x,velocity_y;
   float velocity;
-  float positionX,positionY,size;
+  //float positionX,positionY,size;
+  float ballposx,ballposy,size;
   Pongball(){
-  
+    this.ballposx = width/2;
+    this.ballposy = height/2;
+    this.size = 50;
   }
   
   void move (){ // move ball
-  // wait for coding
+    
   }
   
   void draw (){
-  
+    ellipse(this.ballposx,this.ballposy,this.size,this.size);
   }  
 }
 
 class PongGame {
-  {
-  float posx1,posx2,posy1,posy2 ;
-  posx1 = 0.00;
-  posx2 = width;
-  posy1 = height/2;
-  posy2 = height/2;
-  Pongball ball = new Pongball();
-  PongPaddle player1 = new PongPaddle("0",posx1,posy1,50); 
-  PongPaddle player2 = new PongPaddle("0",posx2,posy2,50);
-  }
-  PongGame(){
   
+  float posx1,posx2,posy1,posy2;
+  Pongball ball = new Pongball();
+  PongPaddle player1;
+  PongPaddle player2;
+  
+  
+  PongGame(){
+    this.posx1 = 0.00;
+    this.posx2 = 1450;
+    this.posy1 = height/2;
+    this.posy2 = height/2;
+    this.player1 = new PongPaddle("0",this.posx1,this.posy1,50);
+    this.player2 = new PongPaddle("0",this.posx2,this.posy2,50);
   }
   
   void serveBall(float velo){ // velocity for start ball
@@ -67,11 +78,20 @@ class PongGame {
   }
   
   void clickAndMove (){ //click and move paddle
-  
+    if(mousePressed){
+      if(mouseX < width/2){
+        this.player1.move();
+      }
+      if(mouseX > width/2){
+        this.player2.move();
+      }
+    }
   }
   
   void draw (){
     line(width/2,0,width/2,height);
-    
+    this.player1.draw();
+    this.player2.draw();
+    ball.draw();
   }
 }
