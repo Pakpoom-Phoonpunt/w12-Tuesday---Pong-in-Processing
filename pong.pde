@@ -5,8 +5,9 @@ void setup (){
 }
 void draw(){
   background(100);
-  game.draw();
   game.clickAndMove();
+  game.draw();
+  
 }
 
 class PongPaddle {
@@ -28,7 +29,8 @@ class PongPaddle {
     rect(this.positionX,this.positionY,50,500);
   }
   void move (){ // move ball
-    rect(this.positionX,mouseY,50,500);
+    this.positionY = mouseY-250;
+    rect(this.positionX,this.positionY,50,500);
   }
 }
 
@@ -62,9 +64,9 @@ class PongGame {
   
   PongGame(){
     this.posx1 = 0.00;
-    this.posx2 = 1450;
-    this.posy1 = height/2;
-    this.posy2 = height/2;
+    this.posx2 = width-50;
+    this.posy1 = height/2-250;
+    this.posy2 = height/2-250;
     this.player1 = new PongPaddle("0",this.posx1,this.posy1,50);
     this.player2 = new PongPaddle("0",this.posx2,this.posy2,50);
   }
