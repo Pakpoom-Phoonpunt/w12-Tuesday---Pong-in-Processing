@@ -17,7 +17,7 @@ class PongPaddle {
   int score ;
   float positionX,positionY,size;
   
-  PongPaddle(int score, float positionX, float positionY,float size){
+  PongPaddle(int score, float positionX, float positionY){
     this.score = 0;
     this.positionX = positionX;
     this.positionY = positionY;
@@ -31,7 +31,7 @@ class PongPaddle {
   }
   
   void draw (){
-    rect(this.positionX,this.positionY,50,500);
+    rect(this.positionX,this.positionY,this.size,500);
   }
   void move (){ // move ball
     this.positionY = mouseY-250;
@@ -60,7 +60,7 @@ class Pongball {
   }
   
   void draw (){
-    ellipse(this.ballposx,this.ballposy,this.size,this.size);
+    circle(this.ballposx,this.ballposy,this.size);
   }  
 }
 
@@ -69,18 +69,14 @@ class PongGame {
   Pongball ball = new Pongball();
   PongPaddle player1;
   PongPaddle player2;
-  
+  int paddleY = height/2-250; 
   PongGame(){
-    this.player1 = new PongPaddle(0,0.00,height/2-250,50);
-    this.player2 = new PongPaddle(0,width-50,height/2-250,50);
+    this.player1 = new PongPaddle(0,0.00,paddleY);
+    this.player2 = new PongPaddle(0,width-50,paddleY);
   }
   
-  void serveBall(Pongball ball,boolean p2){ // velocity for start ball
-    if (p2){
-      ball.ballposx += 2;
-    }else{
-      ball.ballposx -= 2;
-    }
+  void serveBall(Pongball ball){ // velocity for start ball
+    ball.xdirection *= -1;
   }
   
   void update(PongPaddle p){ //update score
@@ -114,20 +110,22 @@ class PongGame {
     text(player2.score , width - (width/4) , 100);
     
     
-    if (((ball.ballposx-50 < player1.positionX+50) & (ball.ballposy+50 > player1.positionY) & (ball.ballposy-50 < player1.positionY+500))){
+    if (((ball.ballposx-ball.size <= player1.positionX+25) & (ball.ballposy+50 > player1.positionY) & (ball.ballposy-50 < player1.positionY+500))){
       player1.bounce_ball(ball);
     }
     
     else if (ball.ballposx-50 < 0){
       this.update(player2);
+      this.serveBall(ball);
     }
     
-    if (((ball.ballposx+50 > player2.positionX) & (ball.ballposy+50 > player2.positionY) & (ball.ballposy-50 < player2.positionY+500))) {
+    if (((ball.ballposx+ball.size >= player2.positionX+25) & (ball.ballposy+50 > player2.positionY) & (ball.ballposy-50 < player2.positionY+500))) {
       player2.bounce_ball(ball);
     }
     
     else if (ball.ballposx+50 > width){
       this.update(player1);
+      this.serveBall(ball);
     }
     
     if ((ball.ballposy+50 > height) || (ball.ballposy-50 < 0)){
